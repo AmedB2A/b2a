@@ -1,0 +1,98 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #000;
+  --surface: #0A0A0A;
+  --surface-2: #111;
+  --border: rgba(255,255,255,0.08);
+  --text: #fff;
+  --text-2: rgba(255,255,255,0.6);
+  --text-3: rgba(255,255,255,0.35);
+  --gold: #D4AF37;
+  --blue: #2D6CDF;
+  --radius: 18px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont,
+    'SF Pro Display', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 9999px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(212,175,55,0.3);
+  color: white;
+}
+
+/* Animations */
+@keyframes float {
+  0%,100% { transform: translateY(0) }
+  50% { transform: translateY(-12px) }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px) }
+  to { opacity: 1; transform: translateY(0) }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0 }
+  100% { background-position: 200% 0 }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg) }
+  to { transform: rotate(360deg) }
+}
+
+@keyframes pulse-gold {
+  0%,100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.4) }
+  50% { box-shadow: 0 0 0 12px rgba(212,175,55,0) }
+}
+
+@media (max-width: 900px) {
+  nav {
+    padding: 0 24px !important;
+  }
+  nav > div:last-child {
+    gap: 16px !important;
+  }
+  nav > div:last-child a:not(:last-child) {
+    display: none;
+  }
+  section {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+  section[id="services"] > div:last-child,
+  section[id="portfolio"] > div > div:last-child {
+    grid-template-columns: 1fr !important;
+  }
+  section > div > div[style*="grid-template-columns: repeat(4,1fr)"] {
+    grid-template-columns: repeat(2,1fr) !important;
+  }
+  form > div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+}
