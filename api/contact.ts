@@ -15,7 +15,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return
   }
 
-  const { name, email, phone, service, message } = req.body ?? {}
+  const { name, email, phone, service, budget, message } = req.body ?? {}
 
   if (!name || !email || !service || !message) {
     res.status(400).json({ error: 'Champs requis manquants' })
@@ -34,6 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         <p><strong>Email :</strong> ${email}</p>
         <p><strong>Téléphone :</strong> ${phone || 'Non renseigné'}</p>
         <p><strong>Service :</strong> ${SERVICE_LABELS[service] ?? service}</p>
+        <p><strong>Budget :</strong> ${budget || 'Non renseigné'}</p>
         <p><strong>Message :</strong></p>
         <p>${String(message).replace(/\n/g, '<br>')}</p>
       `,

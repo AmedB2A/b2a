@@ -1,170 +1,216 @@
+import { motion, useInView } from 'framer-motion'
+import { useRef } from 'react'
+import {
+  FileText, Phone, Banknote,
+  Code2, Rocket
+} from 'lucide-react'
+
+interface Props { theme: 'dark' | 'light' }
+
 const STEPS = [
   {
+    icon: FileText,
     number: '01',
-    title: 'Formulaire',
-    description: 'Décrivez votre projet en détail. Fonctionnalités, design, contraintes.',
+    title: 'Formulaire détaillé',
+    description: 'Décrivez votre projet. Fonctionnalités, design, contraintes techniques. Plus c\'est précis, mieux c\'est.',
     timeframe: 'Maintenant',
-    color: '#3B82F6',
   },
   {
+    icon: Phone,
     number: '02',
     title: 'Rappel sous 48h',
-    description: 'L\'équipe B2A Groupe analyse votre demande et vous rappelle.',
+    description: 'L\'équipe B2A Groupe analyse votre demande, pose les bonnes questions et vous rappelle sous 48h.',
     timeframe: 'J+2',
-    color: '#10B981',
   },
   {
+    icon: Banknote,
     number: '03',
     title: 'Virement bancaire',
-    description: 'Acompte 50% au démarrage. Solde à la livraison. Zéro surprise.',
+    description: 'Acompte 50% au démarrage. Solde à la livraison. Aucune carte, aucun abonnement. Transparent.',
     timeframe: 'J+5',
-    color: '#D4AF37',
   },
   {
+    icon: Code2,
     number: '04',
-    title: 'Développement',
-    description: 'Développement avec points d\'avancement réguliers. Vous voyez l\'évolution.',
+    title: 'Développement actif',
+    description: 'Points d\'avancement réguliers. Vous voyez votre produit évoluer. Itérations rapides avec l\'IA.',
     timeframe: '2-3 mois',
-    color: '#8B5CF6',
   },
   {
+    icon: Rocket,
     number: '05',
-    title: 'Livraison',
-    description: 'Code source + déploiement + formation. Vous êtes propriétaire à 100%.',
+    title: 'Livraison complète',
+    description: 'Code source 100% fourni. Déploiement inclus. Formation. Vous êtes propriétaire à vie.',
     timeframe: 'J+60/90',
-    color: '#D4AF37',
   },
 ]
 
-export default function Process() {
-  return (
-    <section
-      id="process"
-      style={{ padding: '120px 48px' }}
-    >
-      <div style={{ maxWidth: 900, margin: '0 auto' }}>
+export default function Process({ theme }: Props) {
+  void theme
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, amount: 0.1 })
 
-        <div style={{
-          textAlign: 'center',
-          marginBottom: 80,
-        }}>
+  return (
+    <section id="processus" ref={ref} style={{
+      padding: '140px 48px',
+    }}>
+      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          style={{ marginBottom: 80 }}
+        >
           <div style={{
             fontSize: 12, fontWeight: 600,
-            letterSpacing: '0.15em',
-            color: '#D4AF37', marginBottom: 20,
+            letterSpacing: '0.12em',
+            color: 'var(--green)',
+            textTransform: 'uppercase',
+            marginBottom: 20,
           }}>
-            PROCESSUS
+            Processus
           </div>
 
           <h2 style={{
-            fontSize: 'clamp(36px,5vw,56px)',
-            fontWeight: 700,
-            letterSpacing: '-0.03em',
+            fontSize: 'clamp(40px,5vw,64px)',
+            fontWeight: 800,
+            letterSpacing: '-0.04em',
+            color: 'var(--text-1)',
+            lineHeight: 1.0,
           }}>
-            Simple.
-            <br />
+            Simple.{' '}
             <span style={{
-              background: 'linear-gradient(135deg, #D4AF37, #F5E070)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              fontStyle: 'italic',
+              fontFamily: "'Instrument Serif', serif",
+              color: 'var(--green)',
+              fontWeight: 400,
             }}>
               Transparent.
             </span>
-            {' '}Rapide.
+            <br />
+            Rapide.
           </h2>
-        </div>
+        </motion.div>
 
-        <div style={{
-          position: 'relative',
-        }}>
-          {/* Vertical line */}
+        <div style={{ position: 'relative' }}>
+
+          {/* Vertical progress line */}
           <div style={{
             position: 'absolute',
             left: 27,
             top: 0, bottom: 0,
             width: 1,
-            background: 'linear-gradient(to bottom, transparent, rgba(212,175,55,0.3), transparent)',
+            background: 'var(--border)',
           }} />
 
-          {STEPS.map((step, i) => (
-            <div
-              key={i}
-              style={{
-                display: 'flex',
-                gap: 32,
-                marginBottom: i < STEPS.length - 1
-                  ? 48 : 0,
-                position: 'relative',
-              }}
-            >
-              {/* Number circle */}
-              <div style={{
-                width: 56, height: 56,
-                borderRadius: '50%',
-                background: `rgba(${
-                  step.color === '#3B82F6'
-                    ? '59,130,246'
-                    : step.color === '#10B981'
-                      ? '16,185,129'
-                      : step.color === '#D4AF37'
-                        ? '212,175,55'
-                        : step.color === '#8B5CF6'
-                          ? '139,92,246'
-                          : '212,175,55'
-                },0.12)`,
-                border: `1px solid ${step.color}30`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-                zIndex: 1,
-                fontSize: 16,
-                fontWeight: 700,
-                color: step.color,
-                letterSpacing: '-0.02em',
-              }}>
-                {step.number}
-              </div>
+          {/* Animated green line overlay */}
+          <motion.div
+            initial={{ scaleY: 0 }}
+            animate={inView ? { scaleY: 1 } : {}}
+            transition={{ duration: 2, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+            style={{
+              position: 'absolute',
+              left: 27,
+              top: 0, bottom: 0,
+              width: 1,
+              background: 'linear-gradient(to bottom, var(--green), var(--green-2))',
+              transformOrigin: 'top',
+            }}
+          />
 
-              {/* Content */}
-              <div style={{ paddingTop: 12 }}>
-                <div style={{
+          {STEPS.map((step, i) => {
+            const Icon = step.icon
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.3 + i * 0.15,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                style={{
                   display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                  marginBottom: 8,
-                }}>
-                  <h3 style={{
-                    fontSize: 20,
-                    fontWeight: 700,
-                    letterSpacing: '-0.02em',
-                  }}>
-                    {step.title}
-                  </h3>
+                  gap: 32,
+                  marginBottom: 56,
+                  position: 'relative',
+                }}
+              >
+                {/* Icon circle */}
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  style={{
+                    width: 56, height: 56,
+                    borderRadius: '50%',
+                    background: 'var(--bg-2)',
+                    border: '1px solid var(--green-border)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    zIndex: 1,
+                    color: 'var(--green)',
+                    boxShadow: '0 0 20px var(--green-glow)',
+                  }}
+                >
+                  <Icon size={20} />
+                </motion.div>
 
-                  <span style={{
-                    fontSize: 11,
-                    fontWeight: 600,
-                    padding: '3px 10px',
-                    borderRadius: 9999,
-                    background: `${step.color}15`,
-                    color: step.color,
-                    letterSpacing: '0.04em',
+                {/* Content */}
+                <div style={{ paddingTop: 12 }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 12,
+                    marginBottom: 8,
                   }}>
-                    {step.timeframe}
-                  </span>
+                    <span style={{
+                      fontSize: 11,
+                      fontWeight: 600,
+                      color: 'var(--text-3)',
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                    }}>
+                      {step.number}
+                    </span>
+
+                    <h3 style={{
+                      fontSize: 20,
+                      fontWeight: 700,
+                      letterSpacing: '-0.02em',
+                      color: 'var(--text-1)',
+                    }}>
+                      {step.title}
+                    </h3>
+
+                    <span style={{
+                      marginLeft: 'auto',
+                      fontSize: 11,
+                      fontWeight: 600,
+                      padding: '3px 10px',
+                      borderRadius: 'var(--radius-pill)',
+                      background: 'var(--green-glow)',
+                      color: 'var(--green)',
+                      letterSpacing: '0.04em',
+                      border: '1px solid var(--green-border)',
+                      whiteSpace: 'nowrap',
+                    }}>
+                      {step.timeframe}
+                    </span>
+                  </div>
+
+                  <p style={{
+                    fontSize: 15,
+                    color: 'var(--text-2)',
+                    lineHeight: 1.7,
+                  }}>
+                    {step.description}
+                  </p>
                 </div>
-
-                <p style={{
-                  fontSize: 16,
-                  color: 'rgba(255,255,255,0.45)',
-                  lineHeight: 1.65,
-                }}>
-                  {step.description}
-                </p>
-              </div>
-            </div>
-          ))}
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>
