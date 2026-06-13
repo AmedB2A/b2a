@@ -1,18 +1,22 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Lenis from 'lenis'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import Marquee from './components/Marquee'
-import Services from './components/Services'
-import Portfolio from './components/Portfolio'
-import Process from './components/Process'
-import Testimonials from './components/Testimonials'
-import Contact from './components/Contact'
+import FloatingCarousel from './components/FloatingCarousel'
+import ScrollToHash from './components/ScrollToHash'
 import Footer from './components/Footer'
+import Home from './pages/Home'
+import Blog from './pages/Blog'
+import Actualites from './pages/Actualites'
+import Legal from './pages/Legal'
+import CerfaGuide from './pages/blog/CerfaGuide'
+import ComparatifLogiciels from './pages/blog/ComparatifLogiciels'
+import HelloAssoAlternative from './pages/blog/HelloAssoAlternative'
+import CreerAssociation from './pages/blog/CreerAssociation'
+import RecuFiscal from './pages/blog/RecuFiscal'
+import AppRevisionIA from './pages/blog/AppRevisionIA'
 
 export default function App() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.4,
@@ -29,23 +33,27 @@ export default function App() {
     return () => lenis.destroy()
   }, [])
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
-
-  const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark')
-
   return (
-    <div>
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <Hero theme={theme} />
-      <Marquee />
-      <Services theme={theme} />
-      <Portfolio theme={theme} />
-      <Process theme={theme} />
-      <Testimonials theme={theme} />
-      <Contact theme={theme} />
-      <Footer theme={theme} />
+    <div style={{ background: 'var(--bg)' }}>
+      <Navbar />
+      <ScrollToHash />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/cerfa-association-guide" element={<CerfaGuide />} />
+        <Route path="/blog/logiciel-gestion-association-comparatif" element={<ComparatifLogiciels />} />
+        <Route path="/blog/helloasso-alternative" element={<HelloAssoAlternative />} />
+        <Route path="/blog/creer-association-loi-1901" element={<CreerAssociation />} />
+        <Route path="/blog/recu-fiscal-don-association" element={<RecuFiscal />} />
+        <Route path="/blog/application-revision-ia" element={<AppRevisionIA />} />
+        <Route path="/actualites" element={<Actualites />} />
+        <Route path="/legal" element={<Legal />} />
+        <Route path="/about" element={<Navigate to="/#about" replace />} />
+        <Route path="/product" element={<Navigate to="/#produits" replace />} />
+        <Route path="/pricing" element={<Navigate to="/?subject=Demande+de+tarif#contact" replace />} />
+      </Routes>
+      <Footer />
+      <FloatingCarousel />
     </div>
   )
 }

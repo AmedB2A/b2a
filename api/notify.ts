@@ -18,10 +18,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return
   }
 
-  const { name, email, subject, message } = req.body ?? {}
+  const { email, product } = req.body ?? {}
 
-  if (!name || !email || !message) {
-    res.status(400).json({ error: 'Champs requis manquants' })
+  if (!email) {
+    res.status(400).json({ error: 'Email manquant' })
     return
   }
 
@@ -29,21 +29,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     await resend.emails.send({
       from: 'B2A Groupe <onboarding@resend.dev>',
       to: 'b2a.group@outlook.com',
-      replyTo: email,
-      subject: `Contact B2A Groupe — ${escapeHtml(subject || name)}`,
-      html: `
-        <h2>Nouveau message — B2A Groupe</h2>
-        <p><strong>Nom :</strong> ${escapeHtml(name)}</p>
-        <p><strong>Email :</strong> ${escapeHtml(email)}</p>
-        <p><strong>Sujet :</strong> ${escapeHtml(subject || '—')}</p>
-        <hr/>
-        <p style="white-space:pre-wrap">${escapeHtml(String(message))}</p>
-      `,
+      subject: `${escapeHtml(product || 'Produit')} — Notification lancement`,
+      html: `<p>Email : ${escapeHtml(email)}</p>`,
     })
 
     res.status(200).json({ success: true })
   } catch (err) {
     console.error('Resend error:', err)
-    res.status(500).json({ error: "Erreur lors de l'envoi du message" })
+    res.status(500).json({ error: "Erreur lors de l'envoi" })
   }
 }

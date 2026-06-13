@@ -1,71 +1,150 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 
-interface Props { theme: 'dark' | 'light' }
+const PRODUCT_LINKS = [
+  { label: 'AssoDoc', url: 'https://assodoc.fr' },
+  { label: 'ViralScriptia', url: 'https://viralscriptia.com' },
+  { label: 'Revigo', url: '#produits', badge: 'Bientôt' },
+]
 
-export default function Footer({ theme }: Props) {
-  void theme
+const COMPANY_LINKS = [
+  { label: 'À propos', url: '#about' },
+  { label: 'Actualités', url: '/actualites' },
+  { label: 'Blog', url: '/blog' },
+  { label: 'Contact', url: '#contact' },
+  { label: 'Mentions légales', url: '/legal' },
+]
+
+function FooterLink({ label, url, badge }: { label: string; url: string; badge?: string }) {
+  const style = {
+    fontSize: 13,
+    color: 'var(--text-3)',
+    textDecoration: 'none',
+    fontWeight: 500,
+    transition: 'color 0.2s',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 6,
+  }
+  const content = (
+    <>
+      {label}
+      {badge && (
+        <span style={{
+          fontSize: 10,
+          fontWeight: 700,
+          color: '#DC2626',
+          background: 'rgba(220,38,38,0.08)',
+          border: '1px solid rgba(220,38,38,0.2)',
+          borderRadius: 9999,
+          padding: '2px 8px',
+        }}>
+          {badge}
+        </span>
+      )}
+    </>
+  )
+
+  if (url.startsWith('/')) {
+    return <Link to={url} style={style}>{content}</Link>
+  }
+
+  if (url.startsWith('#')) {
+    return <Link to={`/${url}`} style={style}>{content}</Link>
+  }
+
+  return (
+    <motion.a
+      href={url}
+      target={url.startsWith('http') ? '_blank' : undefined}
+      rel={url.startsWith('http') ? 'noopener noreferrer' : undefined}
+      whileHover={{ color: 'var(--purple)' }}
+      style={style}
+    >
+      {content}
+    </motion.a>
+  )
+}
+
+export default function Footer() {
   return (
     <footer style={{
       padding: '48px',
       borderTop: '1px solid var(--border)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      flexWrap: 'wrap',
-      gap: 24,
+      background: 'white',
     }}>
-      <div>
-        <div style={{
-          fontSize: 18,
-          fontWeight: 800,
-          letterSpacing: '-0.03em',
-          marginBottom: 6,
-        }}>
-          <span style={{ color: 'var(--text-1)' }}>B2A</span>
-          <span style={{ color: 'var(--green)' }}> Groupe</span>
-        </div>
-        <div style={{ fontSize: 13, color: 'var(--text-3)' }}>
-          © 2026 B2A Groupe. Tous droits réservés.
-        </div>
-      </div>
-
       <div style={{
         display: 'flex',
-        gap: 32,
-        alignItems: 'center',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
         flexWrap: 'wrap',
+        gap: 40,
+        maxWidth: 1100,
+        margin: '0 auto',
       }}>
-        {[
-          { label: 'AssoDoc', url: 'https://assodoc.fr' },
-          { label: 'ViralScriptia', url: 'https://viralscriptia.com' },
-          { label: 'Contact', url: '#contact' },
-        ].map(link => (
-          <motion.a
-            key={link.label}
-            href={link.url}
-            whileHover={{ color: 'var(--green)' }}
-            style={{
-              fontSize: 14,
+        {/* Logo */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 10
+        }}>
+          <div style={{
+            width: 28, height: 28,
+            borderRadius: 8,
+            background: 'var(--accent-gradient)',
+            display: 'flex', alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <span style={{
+              color: 'white', fontSize: 12,
+              fontWeight: 800,
+            }}>B</span>
+          </div>
+          <div>
+            <div style={{
+              fontSize: 15, fontWeight: 700,
+              letterSpacing: '-0.02em',
+              color: 'var(--text-1)',
+            }}>
+              B2A <span className="gradient-text">Groupe</span>
+            </div>
+            <div style={{
+              fontSize: 11,
               color: 'var(--text-3)',
-              textDecoration: 'none',
-              fontWeight: 500,
-            }}
-          >
-            {link.label}
-          </motion.a>
-        ))}
+            }}>
+              Éditeur de logiciels français
+            </div>
+          </div>
+        </div>
+
+        {/* Products column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-1)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            Produits
+          </div>
+          {PRODUCT_LINKS.map(link => (
+            <FooterLink key={link.label} {...link} />
+          ))}
+        </div>
+
+        {/* Company column */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-1)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+            Entreprise
+          </div>
+          {COMPANY_LINKS.map(link => (
+            <FooterLink key={link.label} {...link} />
+          ))}
+        </div>
       </div>
 
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8,
-        fontSize: 13,
+        fontSize: 12,
         color: 'var(--text-3)',
+        textAlign: 'center',
+        marginTop: 40,
+        paddingTop: 24,
+        borderTop: '1px solid var(--border)',
       }}>
-        <span>Fait avec</span>
-        <span style={{ color: 'var(--green)' }}>♥</span>
-        <span>par B2A Groupe</span>
+        © 2026 B2A Groupe. Tous droits réservés.
       </div>
     </footer>
   )
